@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            background-color: rgb(245,223,101);
+        }
+        span{
+            display: inline-block;
+        }
+        #back{
+            position: relative;
+            top: 0;
+            left: 0;
+            background-image: url(img/rainbow2.png);
+            background-size: 1370px;
+            display: none;
+            opacity: 0.1;
+        }
+        #str{
+            display: none;
+        }
+        .start{
+            position: absolute;
+            top: 555px;
+            left: 555px;
+            width: 230px;
+            height: 68px;
+            border-radius: 10px;
+            background-image: url("img/str.png");
+            background-size: 300px;
+            background-position: -30px -10px;
+        }
+        .start1{
+        position: absolute;
+        top: 555px;
+        left: 545px;
+        width: 250px;
+        height: 70px;
+        border-radius: 10px;
+        background-image: url("img/str.png");
+        background-size: 360px;
+        background-position: -55px -20px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="back">
+    <sapn class="start" id="str"></sapn>
+</div>
+<script>
+    var str = document.getElementById("str");
+    var back = document.getElementById("back");
+    back.style.width = window.innerWidth + "px";
+    back.style.height = window.innerHeight + "px";
+
+////////////////////////////////    事件区   ////////////////////////////////////
+    //页面开始后背景图逐渐显示
+    setTimeout(function(){
+        show(back);
+    },100);
+
+    setTimeout(function(){
+        show(str);
+    },16);
+
+    //调用图片放大缩小函数
+    openTime();
+
+    //这对点击进入的鼠标移入、移出及点击事件
+    str.onmouseover = function(){
+        clearInterval(timer);
+        str.className = "start1";
+    };
+    str.onmouseout = function(){
+        openTime();
+    };
+    str.onclick = function(){
+        window.location = "content.html";
+    };
+
+////////////////////////////////////   函数区   ///////////////////////////////
+    //图片透明度逐渐变大
+    function show(obj){
+        obj.style.display = "block";
+        var n = 0;
+        var time = setInterval(function(){
+            n += 0.1;
+            if (n > 1){
+                clearInterval(time);
+                return;
+            }
+            obj.style.opacity = n;
+        },80);
+    }
+
+    // 图片放大缩小函数
+    var timer = "";
+    function openTime(){
+        var onOff = true;
+        timer = setInterval(function(){
+            clearInterval();
+            if(onOff){
+                str.className = "start";
+                onOff = false;
+            }else{
+                str.className = "start1";
+                onOff = true;
+            }
+        },600);
+    }
+
+</script>
+</body>
+</html>

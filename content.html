@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            background-color: rgb(245,223,101);
+        }
+        span{
+            display: inline-block;
+        }
+        html,body{
+            height: 100%;
+            overflow: hidden;
+        }
+        #video,#rideo,#draw{
+            display: none;
+            opacity: 0.1;
+        }
+        #back{
+            position: relative;
+            top: 0;
+            left: 0;
+            background-image: url(img/content-back.jpg);
+            background-size: 1370px;
+        }
+        .video{
+            position: absolute;
+            top: 100px;
+            left: 260px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 8px solid rgba(245,223,61,0.3);
+            background: rgba(245,223,61,0.1);
+            background-image: url("img/video.png");
+            background-size: 210px;
+            background-position: -10px 9px;
+            box-shadow: 5px 5px 15px gray;
+        }
+        .video1{
+            position: absolute;
+            top: 90px;
+            left: 250px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 8px solid rgba(245,223,61,0.5);
+            background: rgba(245,223,61,0.3);
+            background-image: url("img/video.png");
+            background-size: 230px;
+            background-position: -10px 9px;
+            box-shadow: 5px 5px 15px gray;
+        }
+        .rideo{
+            position: absolute;
+            top: 100px;
+            left: 580px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 8px solid rgba(245,223,61,0.3);
+            background: rgba(245,223,61,0.1);
+            background-image: url("img/rideo.png");
+            background-size: 240px;
+            background-position: -30px 0;
+            box-shadow: 5px 5px 15px gray;
+        }
+        .rideo1{
+            position: absolute;
+            top: 90px;
+            left: 570px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 8px solid rgba(245,223,61,0.5);
+            background: rgba(245,223,61,0.3);
+            background-image: url("img/rideo.png");
+            background-size: 260px;
+            background-position: -30px 5px;
+            box-shadow: 5px 5px 15px gray;
+        }
+        .draw{
+            position: absolute;
+            top: 100px;
+            left: 900px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 8px solid rgba(245,223,61,0.3);
+            background: rgba(245,223,61,0.1);
+            background-image: url("img/draw.png");
+            background-size: 180px;
+            background-position: 0 0;
+            box-shadow: 5px 5px 15px gray;
+        }
+        .draw1{
+            position: absolute;
+            top: 90px;
+            left: 890px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 8px solid rgba(245,223,61,0.5);
+            background: rgba(245,223,61,0.3);
+            background-image: url("img/draw.png");
+            background-size: 210px;
+            background-position: 0 0;
+            box-shadow: 5px 5px 15px gray;
+        }
+        #prev{
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-image: url("img/prev.png");
+            background-size: 70px;
+            background-position: -3px -3px;
+            box-shadow: 2px 2px 5px gray;
+            z-index: 99;
+        }
+        iframe{
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            width: 100%;
+            border: none;
+            opacity: 0.1;
+        }
+        iframe body{
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="back">
+    <span id="video" class="video"></span>
+    <span id="rideo" class="rideo"></span>
+    <span id="draw" class="draw"></span>
+</div>
+<canvas id="canvas" width="800" height="500" ></canvas>
+<span id="prev"></span>
+<iframe id="iframe"></iframe>
+
+<script>
+
+///////////////////////    元素获取区   /////////////////////////////////////
+    var back = document.getElementById("back");
+    var oSpan = document.getElementsByTagName("span");
+    back.style.width = window.innerWidth + "px";
+    back.style.height = window.innerHeight + "px";
+    var video = document.getElementById("video");
+    var rideo = document.getElementById("rideo");
+    var draw = document.getElementById("draw");
+    var canvas = document.getElementById("canvas");
+    var prev = document.getElementById("prev");
+    var iframe = document.getElementById("iframe");
+
+/////////////////////    事件区   ///////////////////////////////////////////////
+
+    //三个图标显示事件
+    setTimeout(function(){
+        show(video);
+    },20);
+    setTimeout(function(){
+        show(rideo);
+    },200);
+    setTimeout(function(){
+        show(draw);
+    },500);
+
+    //三个图标鼠标移入移出事件
+    move(video,"video","video1");
+    move(rideo,"rideo","rideo1");
+    move(draw,"draw","draw1");
+
+    //左一图标点击事件
+    video.onclick = function(){
+        window.location.hash = this.id;
+        hide(back);
+        show(canvas);
+    };
+    //左二图标点击事件
+    rideo.onclick = function(){
+        window.location.hash = this.id;
+        hide(back);
+        show(canvas);
+    };
+    //左三图标点击事件
+    draw.onclick = function(){
+        window.location.hash = this.id;
+        drawFn("#draw","draw.html",back);
+    };
+
+    //根据不同hash值，显示不同页面内容
+    drawFn("#draw","draw.html");
+
+    //perv点击事件
+    prev.onclick= function(){
+        if(window.location.hash){
+            window.location.hash = "";
+            hide(iframe);
+            show(back);
+        }else{
+            window.location = "index.html";
+        }
+    };
+
+
+
+    ///////////////////////////////   函数区   ///////////////////////////////
+
+    //图片逐渐隐藏
+    function hide(obj){
+        var n = 1;
+        var time = setInterval(function(){
+            n -= 0.1;
+            if (n < 0.1){
+                clearInterval(time);
+                obj.style.display = "none";
+                return;
+            }
+            obj.style.opacity = n;
+        },50);
+    }
+
+    //图片逐渐显示
+    function show(obj){
+        obj.style.display = "block";
+        var n = 0;
+        var time = setInterval(function(){
+            n += 0.1;
+            if (n > 1){
+                clearInterval(time);
+                return;
+            }
+            obj.style.opacity = n;
+        },80);
+    }
+
+    //鼠标移入移出函数
+    function move(obj,class1,class2){
+        obj.onmouseover = function(){
+            this.className = class2;
+        };
+        obj.onmouseout = function(){
+            this.className = class1;
+        };
+    }
+
+    //通过hash确认页面内容
+    function drawFn(hash,src,hideobj){
+        if(window.location.hash == hash){
+            hideobj = hideobj || null;
+            if(hideobj){
+                hide(hideobj);
+                iframe.src = src;
+                iframe.style.height = window.innerHeight + "px";
+                show(iframe);
+            }else{
+                iframe.src = src;
+                iframe.style.height = window.innerHeight + "px";
+                iframe.style.display = "block";
+                iframe.style.opacity = 1;
+            }
+        }
+    }
+
+
+
+</script>
+</body>
+</html>
